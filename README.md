@@ -8,8 +8,8 @@ API = Apixu with forecast call
 Swift programming language
 Designs made with Adobe xD
 
-TODO: Fix the location manager
-      Get your location and use it for api so it can get the weather
+TODO:
+      Multiple views
       Create the model for saving multiple cities
       Create slide to the right to switch to different city
       Create and design the forecast at the bottom
