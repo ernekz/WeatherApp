@@ -20,10 +20,34 @@ class ViewController: UIViewController, UISearchBarDelegate {
     let location = LocationManager()
     var exists: Bool = true
     override func viewDidLoad() {
+
         super.viewDidLoad()
+        
+    }
+    
+    private func setCurrentLocation() {
+            guard let exposedLocation = self.location.exposedLocation else {
+                print("*** Error in \(#function): exposedLocation is nil")
+                return
+            }
+            self.location.getPlace(for: exposedLocation) { placemark in
+            guard let placemark = placemark else { return }
+            var output = "Our location is:"
+            if let country = placemark.country {
+                output = output + "\n\(country)"
+            }
+            if let state = placemark.administrativeArea {
+                output = output + "\n\(state)"
+            }
+            if let town = placemark.locality {
+                output = output + "\n\(town)"
+            }
+            print(output)
+        }
     }
     
     @IBAction func searchButton(_ sender: UIButton) {
+        setCurrentLocation()
         let weatherEndpoint = WeatherEndpoint.sevenDayForecast(city: cityField.text!)
         weatherApi.current(with: weatherEndpoint) { (either) in
             switch either {
@@ -35,7 +59,6 @@ class ViewController: UIViewController, UISearchBarDelegate {
                         self.imageView.isHidden = false
                         self.temperatureLbl.text = current.temp_c.description
                         self.conditionsLbl.text = current.condition.text.description
-                        print(current.condition.icon.description)
                         self.imageView.downloaded(from: "http:\(current.condition.icon.description)")
                         
                     } else {
